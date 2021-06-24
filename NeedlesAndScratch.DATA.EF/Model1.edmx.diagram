@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="5dc9ad9e9d374a4d8e2b7f158159d6c2" Name="Diagram1">
+        <EntityTypeShape EntityType="NeedlesAndScratchModel.Artist" Width="1.5" PointX="1.5" PointY="12.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="NeedlesAndScratchModel.Band" Width="1.5" PointX="0.75" PointY="8" IsExpanded="true" />
+        <EntityTypeShape EntityType="NeedlesAndScratchModel.Department" Width="1.5" PointX="5.75" PointY="7.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="NeedlesAndScratchModel.Employee" Width="1.5" PointX="8" PointY="7" IsExpanded="true" />
+        <EntityTypeShape EntityType="NeedlesAndScratchModel.Genre" Width="1.5" PointX="0.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="NeedlesAndScratchModel.Record" Width="1.5" PointX="3" PointY="2.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="NeedlesAndScratchModel.StockStatu" Width="1.5" PointX="0.75" PointY="15.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="NeedlesAndScratchModel.Studio" Width="1.5" PointX="0.75" PointY="17.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="NeedlesAndScratchModel.UserDetail" Width="1.5" PointX="6" PointY="3.375" IsExpanded="true" />
+        <AssociationConnector Association="NeedlesAndScratchModel.FK_Record_Band" ManuallyRouted="false" />
+        <AssociationConnector Association="NeedlesAndScratchModel.FK_UserDetails_Band" ManuallyRouted="false" />
+        <AssociationConnector Association="NeedlesAndScratchModel.FK_Employee_Employee" ManuallyRouted="false" />
+        <AssociationConnector Association="NeedlesAndScratchModel.FK_Record_Genre" ManuallyRouted="false" />
+        <AssociationConnector Association="NeedlesAndScratchModel.FK_UserDetails_Genre" ManuallyRouted="false" />
+        <AssociationConnector Association="NeedlesAndScratchModel.FK_Record_StockStatus" ManuallyRouted="false" />
+        <AssociationConnector Association="NeedlesAndScratchModel.FK_Record_Studio" ManuallyRouted="false" />
+        <AssociationConnector Association="NeedlesAndScratchModel.BandToArtist" ManuallyRouted="false" />
+        <AssociationConnector Association="NeedlesAndScratchModel.EmpToDept" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

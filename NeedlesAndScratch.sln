@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.1401
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NeedlesAndScratch.UI.Secured", "NeedlesAndScratch\NeedlesAndScratch.UI.Secured.csproj", "{7164E892-627F-4C5E-8005-2F9F27881369}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NeedlesAndScratch.DATA.EF", "NeedlesAndScratch.DATA.EF\NeedlesAndScratch.DATA.EF.csproj", "{49F06433-5662-4315-9322-725CF8C64A39}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7164E892-627F-4C5E-8005-2F9F27881369}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7164E892-627F-4C5E-8005-2F9F27881369}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7164E892-627F-4C5E-8005-2F9F27881369}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7164E892-627F-4C5E-8005-2F9F27881369}.Release|Any CPU.Build.0 = Release|Any CPU
+		{49F06433-5662-4315-9322-725CF8C64A39}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{49F06433-5662-4315-9322-725CF8C64A39}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{49F06433-5662-4315-9322-725CF8C64A39}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{49F06433-5662-4315-9322-725CF8C64A39}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F42ACA21-3F30-44F3-88A9-100D18385FDC}
+	EndGlobalSection
+EndGlobal

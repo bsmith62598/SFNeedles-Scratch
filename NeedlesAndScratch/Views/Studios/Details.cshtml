@@ -1,0 +1,58 @@
+﻿@model NeedlesAndScratch.DATA.EF.Studio
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Studio</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.StudioName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.StudioName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.StudioState)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.StudioState)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.StudioCity)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.StudioCity)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.StudioCountry)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.StudioCountry)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.YearFounded)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.YearFounded)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

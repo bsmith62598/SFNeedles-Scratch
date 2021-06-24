@@ -1,0 +1,90 @@
+﻿@model NeedlesAndScratch.DATA.EF.Record
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Record</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.RecordName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RecordName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Tracks)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Tracks)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Length)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Length)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.YearRecorded)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.YearRecorded)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RecordCover)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RecordCover)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Band.BandName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Band.BandName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Genre.GenreName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Genre.GenreName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.StockStatu.Status)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.StockStatu.Status)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Studio.StudioName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Studio.StudioName)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

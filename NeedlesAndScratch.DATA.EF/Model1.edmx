@@ -1,0 +1,713 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="NeedlesAndScratchModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Artist">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="LastName" Type="nvarchar" MaxLength="50" />
+          <Property Name="Age" Type="int" />
+          <Property Name="BandID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Band">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="BandName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Founded" Type="date" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="ArtistID" Type="int" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'NeedlesAndScratch.dbo.BandToArtist' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="BandToArtist">
+          <Key>
+            <PropertyRef Name="BandID" />
+            <PropertyRef Name="ArtistID" />
+          </Key>
+          <Property Name="BandID" Type="int" Nullable="false" />
+          <Property Name="ArtistID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Department">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DeptName" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Employee">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="LastName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="DateOfBirth" Type="date" Nullable="false" />
+          <Property Name="HireDate" Type="date" Nullable="false" />
+          <Property Name="ReportsTo" Type="int" Nullable="false" />
+          <Property Name="DeptID" Type="int" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'NeedlesAndScratch.dbo.EmpToDept' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="EmpToDept">
+          <Key>
+            <PropertyRef Name="DeptID" />
+            <PropertyRef Name="EmpID" />
+          </Key>
+          <Property Name="DeptID" Type="int" Nullable="false" />
+          <Property Name="EmpID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Genre">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="GenreName" Type="nchar" MaxLength="10" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Record">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RecordName" Type="nvarchar" MaxLength="40" Nullable="false" />
+          <Property Name="Tracks" Type="int" Nullable="false" />
+          <Property Name="Length" Type="int" Nullable="false" />
+          <Property Name="YearRecorded" Type="date" />
+          <Property Name="RecordCover" Type="varchar" MaxLength="100" />
+          <Property Name="StockStatus" Type="int" Nullable="false" />
+          <Property Name="GenreID" Type="int" Nullable="false" />
+          <Property Name="BandID" Type="int" Nullable="false" />
+          <Property Name="StudioID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="StockStatus">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Status" Type="nchar" MaxLength="10" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Studio">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="StudioName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="StudioState" Type="char" MaxLength="2" />
+          <Property Name="StudioCity" Type="nvarchar" MaxLength="50" />
+          <Property Name="StudioCountry" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="YearFounded" Type="date" Nullable="false" />
+        </EntityType>
+        <EntityType Name="UserDetails">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FirstName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="LastName" Type="varchar" MaxLength="50" />
+          <Property Name="Email" Type="varchar" MaxLength="50" />
+          <Property Name="FavGenre" Type="int" />
+          <Property Name="FavBand" Type="int" />
+        </EntityType>
+        <Association Name="FK_BandToArtist_Artist">
+          <End Role="Artist" Type="Self.Artist" Multiplicity="1" />
+          <End Role="BandToArtist" Type="Self.BandToArtist" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Artist">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="BandToArtist">
+              <PropertyRef Name="ArtistID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BandToArtist_Band">
+          <End Role="Band" Type="Self.Band" Multiplicity="1" />
+          <End Role="BandToArtist" Type="Self.BandToArtist" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Band">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="BandToArtist">
+              <PropertyRef Name="BandID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Employee_Employee">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="1" />
+          <End Role="Employee1" Type="Self.Employee" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Employee1">
+              <PropertyRef Name="ReportsTo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_EmpToDept_Department">
+          <End Role="Department" Type="Self.Department" Multiplicity="1" />
+          <End Role="EmpToDept" Type="Self.EmpToDept" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Department">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="EmpToDept">
+              <PropertyRef Name="DeptID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_EmpToDept_Employee">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="1" />
+          <End Role="EmpToDept" Type="Self.EmpToDept" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="EmpToDept">
+              <PropertyRef Name="EmpID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Record_Band">
+          <End Role="Band" Type="Self.Band" Multiplicity="1" />
+          <End Role="Record" Type="Self.Record" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Band">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Record">
+              <PropertyRef Name="BandID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Record_Genre">
+          <End Role="Genre" Type="Self.Genre" Multiplicity="1" />
+          <End Role="Record" Type="Self.Record" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Genre">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Record">
+              <PropertyRef Name="GenreID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Record_StockStatus">
+          <End Role="StockStatus" Type="Self.StockStatus" Multiplicity="1" />
+          <End Role="Record" Type="Self.Record" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="StockStatus">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Record">
+              <PropertyRef Name="StockStatus" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Record_Studio">
+          <End Role="Studio" Type="Self.Studio" Multiplicity="1" />
+          <End Role="Record" Type="Self.Record" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Studio">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Record">
+              <PropertyRef Name="StudioID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserDetails_Band">
+          <End Role="Band" Type="Self.Band" Multiplicity="0..1" />
+          <End Role="UserDetails" Type="Self.UserDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Band">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="UserDetails">
+              <PropertyRef Name="FavBand" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserDetails_Genre">
+          <End Role="Genre" Type="Self.Genre" Multiplicity="0..1" />
+          <End Role="UserDetails" Type="Self.UserDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Genre">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="UserDetails">
+              <PropertyRef Name="FavGenre" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="NeedlesAndScratchModelStoreContainer">
+          <EntitySet Name="Artist" EntityType="Self.Artist" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Band" EntityType="Self.Band" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Department" EntityType="Self.Department" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Employee" EntityType="Self.Employee" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Genre" EntityType="Self.Genre" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Record" EntityType="Self.Record" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="StockStatus" EntityType="Self.StockStatus" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Studio" EntityType="Self.Studio" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserDetails" EntityType="Self.UserDetails" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BandToArtist" EntityType="Self.BandToArtist" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [BandToArtist].[BandID] AS [BandID], 
+    [BandToArtist].[ArtistID] AS [ArtistID]
+    FROM [dbo].[BandToArtist] AS [BandToArtist]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="EmpToDept" EntityType="Self.EmpToDept" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [EmpToDept].[DeptID] AS [DeptID], 
+    [EmpToDept].[EmpID] AS [EmpID]
+    FROM [dbo].[EmpToDept] AS [EmpToDept]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK_BandToArtist_Artist" Association="Self.FK_BandToArtist_Artist">
+            <End Role="Artist" EntitySet="Artist" />
+            <End Role="BandToArtist" EntitySet="BandToArtist" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BandToArtist_Band" Association="Self.FK_BandToArtist_Band">
+            <End Role="Band" EntitySet="Band" />
+            <End Role="BandToArtist" EntitySet="BandToArtist" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Employee_Employee" Association="Self.FK_Employee_Employee">
+            <End Role="Employee" EntitySet="Employee" />
+            <End Role="Employee1" EntitySet="Employee" />
+          </AssociationSet>
+          <AssociationSet Name="FK_EmpToDept_Department" Association="Self.FK_EmpToDept_Department">
+            <End Role="Department" EntitySet="Department" />
+            <End Role="EmpToDept" EntitySet="EmpToDept" />
+          </AssociationSet>
+          <AssociationSet Name="FK_EmpToDept_Employee" Association="Self.FK_EmpToDept_Employee">
+            <End Role="Employee" EntitySet="Employee" />
+            <End Role="EmpToDept" EntitySet="EmpToDept" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Record_Band" Association="Self.FK_Record_Band">
+            <End Role="Band" EntitySet="Band" />
+            <End Role="Record" EntitySet="Record" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Record_Genre" Association="Self.FK_Record_Genre">
+            <End Role="Genre" EntitySet="Genre" />
+            <End Role="Record" EntitySet="Record" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Record_StockStatus" Association="Self.FK_Record_StockStatus">
+            <End Role="StockStatus" EntitySet="StockStatus" />
+            <End Role="Record" EntitySet="Record" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Record_Studio" Association="Self.FK_Record_Studio">
+            <End Role="Studio" EntitySet="Studio" />
+            <End Role="Record" EntitySet="Record" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserDetails_Band" Association="Self.FK_UserDetails_Band">
+            <End Role="Band" EntitySet="Band" />
+            <End Role="UserDetails" EntitySet="UserDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserDetails_Genre" Association="Self.FK_UserDetails_Genre">
+            <End Role="Genre" EntitySet="Genre" />
+            <End Role="UserDetails" EntitySet="UserDetails" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="NeedlesAndScratchModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Artist">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Age" Type="Int32" />
+          <Property Name="BandID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Bands" Relationship="Self.BandToArtist" FromRole="Artist" ToRole="Band" />
+        </EntityType>
+        <EntityType Name="Band">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="BandName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Founded" Type="DateTime" Precision="0" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="ArtistID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Records" Relationship="Self.FK_Record_Band" FromRole="Band" ToRole="Record" />
+          <NavigationProperty Name="UserDetails" Relationship="Self.FK_UserDetails_Band" FromRole="Band" ToRole="UserDetails" />
+          <NavigationProperty Name="Artists" Relationship="Self.BandToArtist" FromRole="Band" ToRole="Artist" />
+        </EntityType>
+        <EntityType Name="Department">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DeptName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Employees" Relationship="Self.EmpToDept" FromRole="Department" ToRole="Employee" />
+        </EntityType>
+        <EntityType Name="Employee">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="DateOfBirth" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="HireDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="ReportsTo" Type="Int32" Nullable="false" />
+          <Property Name="DeptID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Employee1" Relationship="Self.FK_Employee_Employee" FromRole="Employee" ToRole="Employee1" />
+          <NavigationProperty Name="Employee2" Relationship="Self.FK_Employee_Employee" FromRole="Employee1" ToRole="Employee" />
+          <NavigationProperty Name="Departments" Relationship="Self.EmpToDept" FromRole="Employee" ToRole="Department" />
+        </EntityType>
+        <EntityType Name="Genre">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="GenreName" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Records" Relationship="Self.FK_Record_Genre" FromRole="Genre" ToRole="Record" />
+          <NavigationProperty Name="UserDetails" Relationship="Self.FK_UserDetails_Genre" FromRole="Genre" ToRole="UserDetails" />
+        </EntityType>
+        <EntityType Name="Record">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RecordName" Type="String" MaxLength="40" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Tracks" Type="Int32" Nullable="false" />
+          <Property Name="Length" Type="Int32" Nullable="false" />
+          <Property Name="YearRecorded" Type="DateTime" Precision="0" />
+          <Property Name="RecordCover" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="StockStatus" Type="Int32" Nullable="false" />
+          <Property Name="GenreID" Type="Int32" Nullable="false" />
+          <Property Name="BandID" Type="Int32" Nullable="false" />
+          <Property Name="StudioID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Band" Relationship="Self.FK_Record_Band" FromRole="Record" ToRole="Band" />
+          <NavigationProperty Name="Genre" Relationship="Self.FK_Record_Genre" FromRole="Record" ToRole="Genre" />
+          <NavigationProperty Name="StockStatu" Relationship="Self.FK_Record_StockStatus" FromRole="Record" ToRole="StockStatus" />
+          <NavigationProperty Name="Studio" Relationship="Self.FK_Record_Studio" FromRole="Record" ToRole="Studio" />
+        </EntityType>
+        <EntityType Name="StockStatu">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Status" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Records" Relationship="Self.FK_Record_StockStatus" FromRole="StockStatus" ToRole="Record" />
+        </EntityType>
+        <EntityType Name="Studio">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="StudioName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="StudioState" Type="String" MaxLength="2" FixedLength="true" Unicode="false" />
+          <Property Name="StudioCity" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="StudioCountry" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="YearFounded" Type="DateTime" Nullable="false" Precision="0" />
+          <NavigationProperty Name="Records" Relationship="Self.FK_Record_Studio" FromRole="Studio" ToRole="Record" />
+        </EntityType>
+        <EntityType Name="UserDetail">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="FavGenre" Type="Int32" />
+          <Property Name="FavBand" Type="Int32" />
+          <NavigationProperty Name="Band" Relationship="Self.FK_UserDetails_Band" FromRole="UserDetails" ToRole="Band" />
+          <NavigationProperty Name="Genre" Relationship="Self.FK_UserDetails_Genre" FromRole="UserDetails" ToRole="Genre" />
+        </EntityType>
+        <Association Name="FK_Record_Band">
+          <End Role="Band" Type="Self.Band" Multiplicity="1" />
+          <End Role="Record" Type="Self.Record" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Band">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Record">
+              <PropertyRef Name="BandID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserDetails_Band">
+          <End Role="Band" Type="Self.Band" Multiplicity="0..1" />
+          <End Role="UserDetails" Type="Self.UserDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Band">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="UserDetails">
+              <PropertyRef Name="FavBand" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Employee_Employee">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="1" />
+          <End Role="Employee1" Type="Self.Employee" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Employee1">
+              <PropertyRef Name="ReportsTo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Record_Genre">
+          <End Role="Genre" Type="Self.Genre" Multiplicity="1" />
+          <End Role="Record" Type="Self.Record" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Genre">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Record">
+              <PropertyRef Name="GenreID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserDetails_Genre">
+          <End Role="Genre" Type="Self.Genre" Multiplicity="0..1" />
+          <End Role="UserDetails" Type="Self.UserDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Genre">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="UserDetails">
+              <PropertyRef Name="FavGenre" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Record_StockStatus">
+          <End Role="StockStatus" Type="Self.StockStatu" Multiplicity="1" />
+          <End Role="Record" Type="Self.Record" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="StockStatus">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Record">
+              <PropertyRef Name="StockStatus" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Record_Studio">
+          <End Role="Studio" Type="Self.Studio" Multiplicity="1" />
+          <End Role="Record" Type="Self.Record" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Studio">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Record">
+              <PropertyRef Name="StudioID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="BandToArtist">
+          <End Role="Artist" Type="Self.Artist" Multiplicity="*" />
+          <End Role="Band" Type="Self.Band" Multiplicity="*" />
+        </Association>
+        <Association Name="EmpToDept">
+          <End Role="Department" Type="Self.Department" Multiplicity="*" />
+          <End Role="Employee" Type="Self.Employee" Multiplicity="*" />
+        </Association>
+        <EntityContainer Name="NeedlesAndScratchEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Artists" EntityType="Self.Artist" />
+          <EntitySet Name="Bands" EntityType="Self.Band" />
+          <EntitySet Name="Departments" EntityType="Self.Department" />
+          <EntitySet Name="Employees" EntityType="Self.Employee" />
+          <EntitySet Name="Genres" EntityType="Self.Genre" />
+          <EntitySet Name="Records" EntityType="Self.Record" />
+          <EntitySet Name="StockStatus" EntityType="Self.StockStatu" />
+          <EntitySet Name="Studios" EntityType="Self.Studio" />
+          <EntitySet Name="UserDetails" EntityType="Self.UserDetail" />
+          <AssociationSet Name="FK_Record_Band" Association="Self.FK_Record_Band">
+            <End Role="Band" EntitySet="Bands" />
+            <End Role="Record" EntitySet="Records" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserDetails_Band" Association="Self.FK_UserDetails_Band">
+            <End Role="Band" EntitySet="Bands" />
+            <End Role="UserDetails" EntitySet="UserDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Employee_Employee" Association="Self.FK_Employee_Employee">
+            <End Role="Employee" EntitySet="Employees" />
+            <End Role="Employee1" EntitySet="Employees" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Record_Genre" Association="Self.FK_Record_Genre">
+            <End Role="Genre" EntitySet="Genres" />
+            <End Role="Record" EntitySet="Records" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserDetails_Genre" Association="Self.FK_UserDetails_Genre">
+            <End Role="Genre" EntitySet="Genres" />
+            <End Role="UserDetails" EntitySet="UserDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Record_StockStatus" Association="Self.FK_Record_StockStatus">
+            <End Role="StockStatus" EntitySet="StockStatus" />
+            <End Role="Record" EntitySet="Records" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Record_Studio" Association="Self.FK_Record_Studio">
+            <End Role="Studio" EntitySet="Studios" />
+            <End Role="Record" EntitySet="Records" />
+          </AssociationSet>
+          <AssociationSet Name="BandToArtist" Association="Self.BandToArtist">
+            <End Role="Artist" EntitySet="Artists" />
+            <End Role="Band" EntitySet="Bands" />
+          </AssociationSet>
+          <AssociationSet Name="EmpToDept" Association="Self.EmpToDept">
+            <End Role="Department" EntitySet="Departments" />
+            <End Role="Employee" EntitySet="Employees" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="NeedlesAndScratchModelStoreContainer" CdmEntityContainer="NeedlesAndScratchEntities">
+          <EntitySetMapping Name="Artists">
+            <EntityTypeMapping TypeName="NeedlesAndScratchModel.Artist">
+              <MappingFragment StoreEntitySet="Artist">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="Age" ColumnName="Age" />
+                <ScalarProperty Name="BandID" ColumnName="BandID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Bands">
+            <EntityTypeMapping TypeName="NeedlesAndScratchModel.Band">
+              <MappingFragment StoreEntitySet="Band">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="BandName" ColumnName="BandName" />
+                <ScalarProperty Name="Founded" ColumnName="Founded" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="ArtistID" ColumnName="ArtistID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Departments">
+            <EntityTypeMapping TypeName="NeedlesAndScratchModel.Department">
+              <MappingFragment StoreEntitySet="Department">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="DeptName" ColumnName="DeptName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Employees">
+            <EntityTypeMapping TypeName="NeedlesAndScratchModel.Employee">
+              <MappingFragment StoreEntitySet="Employee">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="DateOfBirth" ColumnName="DateOfBirth" />
+                <ScalarProperty Name="HireDate" ColumnName="HireDate" />
+                <ScalarProperty Name="ReportsTo" ColumnName="ReportsTo" />
+                <ScalarProperty Name="DeptID" ColumnName="DeptID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Genres">
+            <EntityTypeMapping TypeName="NeedlesAndScratchModel.Genre">
+              <MappingFragment StoreEntitySet="Genre">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="GenreName" ColumnName="GenreName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Records">
+            <EntityTypeMapping TypeName="NeedlesAndScratchModel.Record">
+              <MappingFragment StoreEntitySet="Record">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="RecordName" ColumnName="RecordName" />
+                <ScalarProperty Name="Tracks" ColumnName="Tracks" />
+                <ScalarProperty Name="Length" ColumnName="Length" />
+                <ScalarProperty Name="YearRecorded" ColumnName="YearRecorded" />
+                <ScalarProperty Name="RecordCover" ColumnName="RecordCover" />
+                <ScalarProperty Name="StockStatus" ColumnName="StockStatus" />
+                <ScalarProperty Name="GenreID" ColumnName="GenreID" />
+                <ScalarProperty Name="BandID" ColumnName="BandID" />
+                <ScalarProperty Name="StudioID" ColumnName="StudioID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="StockStatus">
+            <EntityTypeMapping TypeName="NeedlesAndScratchModel.StockStatu">
+              <MappingFragment StoreEntitySet="StockStatus">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Studios">
+            <EntityTypeMapping TypeName="NeedlesAndScratchModel.Studio">
+              <MappingFragment StoreEntitySet="Studio">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="StudioName" ColumnName="StudioName" />
+                <ScalarProperty Name="StudioState" ColumnName="StudioState" />
+                <ScalarProperty Name="StudioCity" ColumnName="StudioCity" />
+                <ScalarProperty Name="StudioCountry" ColumnName="StudioCountry" />
+                <ScalarProperty Name="YearFounded" ColumnName="YearFounded" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserDetails">
+            <EntityTypeMapping TypeName="NeedlesAndScratchModel.UserDetail">
+              <MappingFragment StoreEntitySet="UserDetails">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="FavGenre" ColumnName="FavGenre" />
+                <ScalarProperty Name="FavBand" ColumnName="FavBand" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="BandToArtist" TypeName="NeedlesAndScratchModel.BandToArtist" StoreEntitySet="BandToArtist">
+            <EndProperty Name="Artist">
+              <ScalarProperty Name="ID" ColumnName="ArtistID" />
+            </EndProperty>
+            <EndProperty Name="Band">
+              <ScalarProperty Name="ID" ColumnName="BandID" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="EmpToDept" TypeName="NeedlesAndScratchModel.EmpToDept" StoreEntitySet="EmpToDept">
+            <EndProperty Name="Department">
+              <ScalarProperty Name="ID" ColumnName="DeptID" />
+            </EndProperty>
+            <EndProperty Name="Employee">
+              <ScalarProperty Name="ID" ColumnName="EmpID" />
+            </EndProperty>
+          </AssociationSetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
