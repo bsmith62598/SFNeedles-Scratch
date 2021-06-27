@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using NeedlesAndScratch.DATA.EF;
 
 namespace NeedlesAndScratch.UI.Secured.Controllers
 {
@@ -153,11 +154,26 @@ namespace NeedlesAndScratch.UI.Secured.Controllers
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    var code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                    var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                    await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking this link: <a href=\"" + callbackUrl + "\">link</a>");
-                    ViewBag.Link = callbackUrl;
-                    return View("DisplayEmail");
+
+                    //Create a new userdetail object to store our UserDetail information
+                    UserDetail newUserDeets = new UserDetail();
+
+                    //Assign the values of each UserDetail property to the object
+                    newUserDeets.UserID = user.Id;
+                    newUserDeets.FirstName = model.FirstName;
+                    newUserDeets.LastName = model.LastName;
+                    newUserDeets.FavBand = model.FavBand;
+                    newUserDeets.FavGenre = model.FavGenre;
+
+                    //Since we want to access our database/tables, created a new BookStorePlusEntites object
+                    NeedlesAndScratchEntities db = new NeedlesAndScratchEntities();
+
+                    //Add the newUserDeets object (with our updated UserDetail values) to the table
+                    db.UserDetails.Add(newUserDeets);
+
+                    //Save the changes
+                    db.SaveChanges();
+
                 }
                 AddErrors(result);
             }

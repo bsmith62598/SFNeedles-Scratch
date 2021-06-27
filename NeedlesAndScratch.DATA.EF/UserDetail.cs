@@ -14,14 +14,11 @@ namespace NeedlesAndScratch.DATA.EF
     
     public partial class UserDetail
     {
-        public int ID { get; set; }
+        public string UserID { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Email { get; set; }
-        public Nullable<int> FavGenre { get; set; }
-        public Nullable<int> FavBand { get; set; }
-    
-        public virtual Band Band { get; set; }
-        public virtual Genre Genre { get; set; }
+        public string FavGenre { get; set; }
+        public string FavBand { get; set; }
     }
 }

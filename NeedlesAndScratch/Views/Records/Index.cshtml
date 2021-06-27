@@ -9,37 +9,53 @@
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.RecordCover)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.RecordName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Band.BandName)
-        </th>
-        <th></th>
-    </tr>
-
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.RecordCover)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.RecordName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Band.BandName)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.ID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.ID })
-        </td>
-    </tr>
-}
-
+<table class="table data-table table-striped">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.RecordCover)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RecordName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Band.BandName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Price)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @*@Html.DisplayFor(modelItem => item.RecordCover)*@
+                    <img src="~/Content/Images/RecordCovers/t_@item.RecordCover" alt="Record Cover" title="@item.RecordCover" />
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RecordName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Band.BandName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)
+                </td>
+                <td>
+                    @Html.ActionLink("Details", "Details", new { id = item.ID })
+                </td>
+            </tr>
+        }
+    </tbody>
 </table>
+
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            $(".data-table").DataTable();
+        })
+    </script>
+}

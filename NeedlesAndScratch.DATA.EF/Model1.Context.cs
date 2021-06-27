@@ -30,9 +30,9 @@ namespace NeedlesAndScratch.DATA.EF
         public virtual DbSet<Department> Departments { get; set; }
         public virtual DbSet<Employee> Employees { get; set; }
         public virtual DbSet<Genre> Genres { get; set; }
-        public virtual DbSet<Record> Records { get; set; }
         public virtual DbSet<StockStatu> StockStatus { get; set; }
         public virtual DbSet<Studio> Studios { get; set; }
+        public virtual DbSet<Record> Records { get; set; }
         public virtual DbSet<UserDetail> UserDetails { get; set; }
     }
 }

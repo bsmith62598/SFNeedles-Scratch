@@ -2,11 +2,16 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.Drawing;
 using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using NeedlesAndScratch.DATA.EF;
+using NeedlesAndScratch.UI.Secured;
+using NeedlesAndScratch.UI.Secured.Models;
+using PagedList;
+using PagedList.Mvc;
 
 namespace NeedlesAndScratch.Controllers
 {
@@ -36,6 +41,48 @@ namespace NeedlesAndScratch.Controllers
             return View(record);
         }
 
+        #region Custom Add to Cart functionality (Called from the Details view)
+        public ActionResult AddToCart(int qty, int recordID)
+        {
+            Dictionary<int, CartItemViewModel> shoppingCart = null;
+            
+            if (Session["cart"] != null)
+            {
+                shoppingCart = (Dictionary<int, CartItemViewModel>)Session["cart"];
+            }
+            else
+            {
+                shoppingCart = new Dictionary<int, CartItemViewModel>();
+            }
+
+            Record product = db.Records.Where(r => r.ID == recordID).FirstOrDefault();
+
+            if (product == null)
+            {
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                CartItemViewModel item = new CartItemViewModel(qty, product);
+                
+                if (shoppingCart.ContainsKey(product.ID))
+                {
+                    shoppingCart[product.ID].Qty += qty;
+                }
+                else
+                {
+                    shoppingCart.Add(product.ID, item);
+                }
+                
+
+                Session["cart"] = shoppingCart;
+                
+            }
+
+            return RedirectToAction("Index", "ShoppingCart");
+        }
+        #endregion
+
         // GET: Records/Create
         public ActionResult Create()
         {
@@ -51,10 +98,41 @@ namespace NeedlesAndScratch.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID,RecordName,Tracks,Length,YearRecorded,RecordCover,StockStatus,GenreID,BandID,StudioID")] Record record)
+        public ActionResult Create([Bind(Include = "ID,RecordName,Tracks,Length,YearRecorded,RecordCover,StockStatus,GenreID,BandID,StudioID")] Record record, HttpPostedFileBase recordCover)
         {
             if (ModelState.IsValid)
             {
+                #region File Upload
+
+                //Default image if one isn't provided
+                string file = "NoImage.png";
+                //Check if the user uploaded an image
+                if (recordCover != null)
+                {
+                    //Preserve the file name for the image
+                    file = recordCover.FileName;
+                    //Isolate the extention
+                    string ext = file.Substring(file.LastIndexOf('.'));
+                    //Create an array of good extensions
+                    string[] goodExts = { ".jpeg", ".jpg", ".png", ".gif" };
+
+                    //Check taht the uploaded file extension is in our list of extensions and check taht the file size <= 4MB max imposed by ASP.net
+                    if (goodExts.Contains(ext.ToLower()) && recordCover.ContentLength <= 4194304)
+                    {
+                        //Create a new file name (using a GUID)
+                        file = Guid.NewGuid() + ext;
+                        
+
+                        #region Resize Image                        string savePath = Server.MapPath("~/Content/Images/RecordCovers/");                        Image convertedImage = Image.FromStream(recordCover.InputStream);                        int maxImageSize = 500;                        int maxThumbSize = 100;                        ImageUtility.ResizeImage(savePath, file, convertedImage, maxImageSize, maxThumbSize);                        #endregion
+
+                    }
+
+                    //No matter what, update the image url with the vile of the file variable
+                    record.RecordCover = file;
+                }
+
+                #endregion
+
                 db.Records.Add(record);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -91,10 +169,45 @@ namespace NeedlesAndScratch.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,RecordName,Tracks,Length,YearRecorded,RecordCover,StockStatus,GenreID,BandID,StudioID")] Record record)
+        public ActionResult Edit([Bind(Include = "ID,RecordName,Tracks,Length,YearRecorded,RecordCover,StockStatus,GenreID,BandID,StudioID")] Record record, HttpPostedFileBase recordCover)
         {
             if (ModelState.IsValid)
             {
+
+                #region File Upload
+
+                //Default image if one isn't provided
+                string file = "NoImage.png";
+                //Check if the user uploaded an image
+                if (recordCover != null)
+                {
+                    //Preserve the file name for the image
+                    file = recordCover.FileName;
+                    //Isolate the extention
+                    string ext = file.Substring(file.LastIndexOf('.'));
+                    //Create an array of good extensions
+                    string[] goodExts = { ".jpeg", ".jpg", ".png", ".gif" };
+
+                    //Check taht the uploaded file extension is in our list of extensions and check taht the file size <= 4MB max imposed by ASP.net
+                    if (goodExts.Contains(ext.ToLower()) && recordCover.ContentLength <= 4194304)
+                    {
+                        //Create a new file name (using a GUID)
+                        file = Guid.NewGuid() + ext;
+
+
+
+
+                        #region Resize Image
+                        string savePath = Server.MapPath("~/Content/Images/RecordCovers/");                        Image convertedImage = Image.FromStream(recordCover.InputStream);                        int maxImageSize = 500;                        int maxThumbSize = 100;                        ImageUtility.ResizeImage(savePath, file, convertedImage, maxImageSize, maxThumbSize);                        #endregion
+
+                    }
+
+                    //No matter what, update the image url with the vile of the file variable
+                    record.RecordCover = file;
+                }
+
+                #endregion
+
                 db.Entry(record).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");

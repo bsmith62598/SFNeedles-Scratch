@@ -43,14 +43,6 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.RecordCover)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.RecordCover)
-        </dd>
-
-        <dt>
             @Html.DisplayNameFor(model => model.Band.BandName)
         </dt>
 
@@ -64,6 +56,14 @@
 
         <dd>
             @Html.DisplayFor(model => model.Genre.GenreName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ID)
         </dd>
 
         <dt>
@@ -82,7 +82,29 @@
             @Html.DisplayFor(model => model.Studio.StudioName)
         </dd>
 
+        <dt>
+            @Html.DisplayNameFor(model => model.Price)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Price)
+        </dd>
+
     </dl>
+
+    <p>
+        @using (Html.BeginForm("AddToCart", "Records", new { @recordID = Model.ID }, FormMethod.Post, new { @class = "text-center" }))
+        {
+            @Html.HiddenFor(x => x.ID)
+            <span class="label">Quantity: </span>
+            @Html.TextBox("Qty", 1, new { @class = "form-control", @style = "max-width: 50px; display: inline;" })
+            <input type="submit" value="Add to Cart" class="btn btn-primary" name="qty" />
+        }
+    </p>
+
+</div>
+<div class="col-md-6">
+    <img src="~/Content/Images/RecordCovers/@Model.RecordCover" alt="Record Cover" title="@Model.RecordCover" />
 </div>
 <p>
     @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |

@@ -18,7 +18,6 @@ namespace NeedlesAndScratch.DATA.EF
         public Genre()
         {
             this.Records = new HashSet<Record>();
-            this.UserDetails = new HashSet<UserDetail>();
         }
     
         public int ID { get; set; }
@@ -26,7 +25,5 @@ namespace NeedlesAndScratch.DATA.EF
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Record> Records { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<UserDetail> UserDetails { get; set; }
     }
 }

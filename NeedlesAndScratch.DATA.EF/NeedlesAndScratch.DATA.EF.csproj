@@ -65,6 +65,14 @@
     <Compile Include="Genre.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Metadata\ArtistMetadata.cs" />
+    <Compile Include="Metadata\BandMetadata.cs" />
+    <Compile Include="Metadata\DepartmentMetadata.cs" />
+    <Compile Include="Metadata\EmployeeMetadata.cs" />
+    <Compile Include="Metadata\GenreMetadata.cs" />
+    <Compile Include="Metadata\RecordMetadata.cs" />
+    <Compile Include="Metadata\StudioMetadata.cs" />
+    <Compile Include="Metadata\UserDetailsMetadata.cs" />
     <Compile Include="Model1.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

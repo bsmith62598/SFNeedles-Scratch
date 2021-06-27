@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using NeedlesAndScratch.DATA.EF;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace NeedlesAndScratch.UI.Secured.Models
@@ -79,6 +80,18 @@ namespace NeedlesAndScratch.UI.Secured.Models
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+
+        [Required]
+        public string FirstName { get; set; }
+
+        [Required]
+        public string LastName { get; set; }
+
+        [Display(Name ="Favorite Genre. Optional")]
+        public string FavGenre { get; set; }
+
+        [Display(Name ="Favorite Band. Optional")]
+        public string FavBand { get; set; }
     }
 
     public class ResetPasswordViewModel

@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="NeedlesAndScratchModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="NeedlesAndScratchModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Artist">
           <Key>
             <PropertyRef Name="ID" />
@@ -85,6 +85,7 @@ warning 6002: The table/view 'NeedlesAndScratch.dbo.EmpToDept' does not have a p
           <Property Name="GenreID" Type="int" Nullable="false" />
           <Property Name="BandID" Type="int" Nullable="false" />
           <Property Name="StudioID" Type="int" Nullable="false" />
+          <Property Name="Price" Type="money" />
         </EntityType>
         <EntityType Name="StockStatus">
           <Key>
@@ -106,14 +107,14 @@ warning 6002: The table/view 'NeedlesAndScratch.dbo.EmpToDept' does not have a p
         </EntityType>
         <EntityType Name="UserDetails">
           <Key>
-            <PropertyRef Name="ID" />
+            <PropertyRef Name="UserID" />
           </Key>
-          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserID" Type="nvarchar" MaxLength="128" Nullable="false" />
           <Property Name="FirstName" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="LastName" Type="varchar" MaxLength="50" />
           <Property Name="Email" Type="varchar" MaxLength="50" />
-          <Property Name="FavGenre" Type="int" />
-          <Property Name="FavBand" Type="int" />
+          <Property Name="FavGenre" Type="varchar" MaxLength="50" />
+          <Property Name="FavBand" Type="varchar" MaxLength="50" />
         </EntityType>
         <Association Name="FK_BandToArtist_Artist">
           <End Role="Artist" Type="Self.Artist" Multiplicity="1" />
@@ -223,30 +224,6 @@ warning 6002: The table/view 'NeedlesAndScratch.dbo.EmpToDept' does not have a p
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_UserDetails_Band">
-          <End Role="Band" Type="Self.Band" Multiplicity="0..1" />
-          <End Role="UserDetails" Type="Self.UserDetails" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Band">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="UserDetails">
-              <PropertyRef Name="FavBand" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_UserDetails_Genre">
-          <End Role="Genre" Type="Self.Genre" Multiplicity="0..1" />
-          <End Role="UserDetails" Type="Self.UserDetails" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Genre">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="UserDetails">
-              <PropertyRef Name="FavGenre" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityContainer Name="NeedlesAndScratchModelStoreContainer">
           <EntitySet Name="Artist" EntityType="Self.Artist" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Band" EntityType="Self.Band" Schema="dbo" store:Type="Tables" />
@@ -305,17 +282,8 @@ warning 6002: The table/view 'NeedlesAndScratch.dbo.EmpToDept' does not have a p
             <End Role="Studio" EntitySet="Studio" />
             <End Role="Record" EntitySet="Record" />
           </AssociationSet>
-          <AssociationSet Name="FK_UserDetails_Band" Association="Self.FK_UserDetails_Band">
-            <End Role="Band" EntitySet="Band" />
-            <End Role="UserDetails" EntitySet="UserDetails" />
-          </AssociationSet>
-          <AssociationSet Name="FK_UserDetails_Genre" Association="Self.FK_UserDetails_Genre">
-            <End Role="Genre" EntitySet="Genre" />
-            <End Role="UserDetails" EntitySet="UserDetails" />
-          </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="NeedlesAndScratchModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -339,9 +307,8 @@ warning 6002: The table/view 'NeedlesAndScratch.dbo.EmpToDept' does not have a p
           <Property Name="Founded" Type="DateTime" Precision="0" />
           <Property Name="IsActive" Type="Boolean" Nullable="false" />
           <Property Name="ArtistID" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Records" Relationship="Self.FK_Record_Band" FromRole="Band" ToRole="Record" />
-          <NavigationProperty Name="UserDetails" Relationship="Self.FK_UserDetails_Band" FromRole="Band" ToRole="UserDetails" />
           <NavigationProperty Name="Artists" Relationship="Self.BandToArtist" FromRole="Band" ToRole="Artist" />
+          <NavigationProperty Name="Records" Relationship="NeedlesAndScratchModel.FK_Record_Band" FromRole="Band" ToRole="Record" />
         </EntityType>
         <EntityType Name="Department">
           <Key>
@@ -372,27 +339,7 @@ warning 6002: The table/view 'NeedlesAndScratch.dbo.EmpToDept' does not have a p
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="GenreName" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="Records" Relationship="Self.FK_Record_Genre" FromRole="Genre" ToRole="Record" />
-          <NavigationProperty Name="UserDetails" Relationship="Self.FK_UserDetails_Genre" FromRole="Genre" ToRole="UserDetails" />
-        </EntityType>
-        <EntityType Name="Record">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="RecordName" Type="String" MaxLength="40" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Tracks" Type="Int32" Nullable="false" />
-          <Property Name="Length" Type="Int32" Nullable="false" />
-          <Property Name="YearRecorded" Type="DateTime" Precision="0" />
-          <Property Name="RecordCover" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="StockStatus" Type="Int32" Nullable="false" />
-          <Property Name="GenreID" Type="Int32" Nullable="false" />
-          <Property Name="BandID" Type="Int32" Nullable="false" />
-          <Property Name="StudioID" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Band" Relationship="Self.FK_Record_Band" FromRole="Record" ToRole="Band" />
-          <NavigationProperty Name="Genre" Relationship="Self.FK_Record_Genre" FromRole="Record" ToRole="Genre" />
-          <NavigationProperty Name="StockStatu" Relationship="Self.FK_Record_StockStatus" FromRole="Record" ToRole="StockStatus" />
-          <NavigationProperty Name="Studio" Relationship="Self.FK_Record_Studio" FromRole="Record" ToRole="Studio" />
+          <NavigationProperty Name="Records" Relationship="NeedlesAndScratchModel.FK_Record_Genre" FromRole="Genre" ToRole="Record" />
         </EntityType>
         <EntityType Name="StockStatu">
           <Key>
@@ -400,7 +347,7 @@ warning 6002: The table/view 'NeedlesAndScratch.dbo.EmpToDept' does not have a p
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Status" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="Records" Relationship="Self.FK_Record_StockStatus" FromRole="StockStatus" ToRole="Record" />
+          <NavigationProperty Name="Records" Relationship="NeedlesAndScratchModel.FK_Record_StockStatus" FromRole="StockStatu" ToRole="Record" />
         </EntityType>
         <EntityType Name="Studio">
           <Key>
@@ -412,45 +359,8 @@ warning 6002: The table/view 'NeedlesAndScratch.dbo.EmpToDept' does not have a p
           <Property Name="StudioCity" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="StudioCountry" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="YearFounded" Type="DateTime" Nullable="false" Precision="0" />
-          <NavigationProperty Name="Records" Relationship="Self.FK_Record_Studio" FromRole="Studio" ToRole="Record" />
+          <NavigationProperty Name="Records" Relationship="NeedlesAndScratchModel.FK_Record_Studio" FromRole="Studio" ToRole="Record" />
         </EntityType>
-        <EntityType Name="UserDetail">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="FavGenre" Type="Int32" />
-          <Property Name="FavBand" Type="Int32" />
-          <NavigationProperty Name="Band" Relationship="Self.FK_UserDetails_Band" FromRole="UserDetails" ToRole="Band" />
-          <NavigationProperty Name="Genre" Relationship="Self.FK_UserDetails_Genre" FromRole="UserDetails" ToRole="Genre" />
-        </EntityType>
-        <Association Name="FK_Record_Band">
-          <End Role="Band" Type="Self.Band" Multiplicity="1" />
-          <End Role="Record" Type="Self.Record" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Band">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="Record">
-              <PropertyRef Name="BandID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_UserDetails_Band">
-          <End Role="Band" Type="Self.Band" Multiplicity="0..1" />
-          <End Role="UserDetails" Type="Self.UserDetail" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Band">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="UserDetails">
-              <PropertyRef Name="FavBand" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Employee_Employee">
           <End Role="Employee" Type="Self.Employee" Multiplicity="1" />
           <End Role="Employee1" Type="Self.Employee" Multiplicity="*" />
@@ -460,54 +370,6 @@ warning 6002: The table/view 'NeedlesAndScratch.dbo.EmpToDept' does not have a p
             </Principal>
             <Dependent Role="Employee1">
               <PropertyRef Name="ReportsTo" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Record_Genre">
-          <End Role="Genre" Type="Self.Genre" Multiplicity="1" />
-          <End Role="Record" Type="Self.Record" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Genre">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="Record">
-              <PropertyRef Name="GenreID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_UserDetails_Genre">
-          <End Role="Genre" Type="Self.Genre" Multiplicity="0..1" />
-          <End Role="UserDetails" Type="Self.UserDetail" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Genre">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="UserDetails">
-              <PropertyRef Name="FavGenre" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Record_StockStatus">
-          <End Role="StockStatus" Type="Self.StockStatu" Multiplicity="1" />
-          <End Role="Record" Type="Self.Record" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="StockStatus">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="Record">
-              <PropertyRef Name="StockStatus" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Record_Studio">
-          <End Role="Studio" Type="Self.Studio" Multiplicity="1" />
-          <End Role="Record" Type="Self.Record" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Studio">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="Record">
-              <PropertyRef Name="StudioID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -525,37 +387,11 @@ warning 6002: The table/view 'NeedlesAndScratch.dbo.EmpToDept' does not have a p
           <EntitySet Name="Departments" EntityType="Self.Department" />
           <EntitySet Name="Employees" EntityType="Self.Employee" />
           <EntitySet Name="Genres" EntityType="Self.Genre" />
-          <EntitySet Name="Records" EntityType="Self.Record" />
           <EntitySet Name="StockStatus" EntityType="Self.StockStatu" />
           <EntitySet Name="Studios" EntityType="Self.Studio" />
-          <EntitySet Name="UserDetails" EntityType="Self.UserDetail" />
-          <AssociationSet Name="FK_Record_Band" Association="Self.FK_Record_Band">
-            <End Role="Band" EntitySet="Bands" />
-            <End Role="Record" EntitySet="Records" />
-          </AssociationSet>
-          <AssociationSet Name="FK_UserDetails_Band" Association="Self.FK_UserDetails_Band">
-            <End Role="Band" EntitySet="Bands" />
-            <End Role="UserDetails" EntitySet="UserDetails" />
-          </AssociationSet>
           <AssociationSet Name="FK_Employee_Employee" Association="Self.FK_Employee_Employee">
             <End Role="Employee" EntitySet="Employees" />
             <End Role="Employee1" EntitySet="Employees" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Record_Genre" Association="Self.FK_Record_Genre">
-            <End Role="Genre" EntitySet="Genres" />
-            <End Role="Record" EntitySet="Records" />
-          </AssociationSet>
-          <AssociationSet Name="FK_UserDetails_Genre" Association="Self.FK_UserDetails_Genre">
-            <End Role="Genre" EntitySet="Genres" />
-            <End Role="UserDetails" EntitySet="UserDetails" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Record_StockStatus" Association="Self.FK_Record_StockStatus">
-            <End Role="StockStatus" EntitySet="StockStatus" />
-            <End Role="Record" EntitySet="Records" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Record_Studio" Association="Self.FK_Record_Studio">
-            <End Role="Studio" EntitySet="Studios" />
-            <End Role="Record" EntitySet="Records" />
           </AssociationSet>
           <AssociationSet Name="BandToArtist" Association="Self.BandToArtist">
             <End Role="Artist" EntitySet="Artists" />
@@ -565,7 +401,104 @@ warning 6002: The table/view 'NeedlesAndScratch.dbo.EmpToDept' does not have a p
             <End Role="Department" EntitySet="Departments" />
             <End Role="Employee" EntitySet="Employees" />
           </AssociationSet>
+          <EntitySet Name="Records" EntityType="NeedlesAndScratchModel.Record" />
+          <AssociationSet Name="FK_Record_Band" Association="NeedlesAndScratchModel.FK_Record_Band">
+            <End Role="Band" EntitySet="Bands" />
+            <End Role="Record" EntitySet="Records" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Record_Genre" Association="NeedlesAndScratchModel.FK_Record_Genre">
+            <End Role="Genre" EntitySet="Genres" />
+            <End Role="Record" EntitySet="Records" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Record_StockStatus" Association="NeedlesAndScratchModel.FK_Record_StockStatus">
+            <End Role="StockStatu" EntitySet="StockStatus" />
+            <End Role="Record" EntitySet="Records" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Record_Studio" Association="NeedlesAndScratchModel.FK_Record_Studio">
+            <End Role="Studio" EntitySet="Studios" />
+            <End Role="Record" EntitySet="Records" />
+          </AssociationSet>
+          <EntitySet Name="UserDetails" EntityType="NeedlesAndScratchModel.UserDetail" />
         </EntityContainer>
+        <EntityType Name="Record">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RecordName" Type="String" Nullable="false" MaxLength="40" FixedLength="false" Unicode="true" />
+          <Property Name="Tracks" Type="Int32" Nullable="false" />
+          <Property Name="Length" Type="Int32" Nullable="false" />
+          <Property Name="YearRecorded" Type="DateTime" Precision="0" />
+          <Property Name="RecordCover" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="StockStatus" Type="Int32" Nullable="false" />
+          <Property Name="GenreID" Type="Int32" Nullable="false" />
+          <Property Name="BandID" Type="Int32" Nullable="false" />
+          <Property Name="StudioID" Type="Int32" Nullable="false" />
+          <Property Name="Price" Type="Decimal" Precision="19" Scale="4" />
+          <NavigationProperty Name="Band" Relationship="NeedlesAndScratchModel.FK_Record_Band" FromRole="Record" ToRole="Band" />
+          <NavigationProperty Name="Genre" Relationship="NeedlesAndScratchModel.FK_Record_Genre" FromRole="Record" ToRole="Genre" />
+          <NavigationProperty Name="StockStatu" Relationship="NeedlesAndScratchModel.FK_Record_StockStatus" FromRole="Record" ToRole="StockStatu" />
+          <NavigationProperty Name="Studio" Relationship="NeedlesAndScratchModel.FK_Record_Studio" FromRole="Record" ToRole="Studio" />
+        </EntityType>
+        <Association Name="FK_Record_Band">
+          <End Type="NeedlesAndScratchModel.Band" Role="Band" Multiplicity="1" />
+          <End Type="NeedlesAndScratchModel.Record" Role="Record" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Band">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Record">
+              <PropertyRef Name="BandID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Record_Genre">
+          <End Type="NeedlesAndScratchModel.Genre" Role="Genre" Multiplicity="1" />
+          <End Type="NeedlesAndScratchModel.Record" Role="Record" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Genre">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Record">
+              <PropertyRef Name="GenreID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Record_StockStatus">
+          <End Type="NeedlesAndScratchModel.StockStatu" Role="StockStatu" Multiplicity="1" />
+          <End Type="NeedlesAndScratchModel.Record" Role="Record" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="StockStatu">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Record">
+              <PropertyRef Name="StockStatus" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Record_Studio">
+          <End Type="NeedlesAndScratchModel.Studio" Role="Studio" Multiplicity="1" />
+          <End Type="NeedlesAndScratchModel.Record" Role="Record" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Studio">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Record">
+              <PropertyRef Name="StudioID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="UserDetail">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="FirstName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="FavGenre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="FavBand" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -623,22 +556,6 @@ warning 6002: The table/view 'NeedlesAndScratch.dbo.EmpToDept' does not have a p
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Records">
-            <EntityTypeMapping TypeName="NeedlesAndScratchModel.Record">
-              <MappingFragment StoreEntitySet="Record">
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="RecordName" ColumnName="RecordName" />
-                <ScalarProperty Name="Tracks" ColumnName="Tracks" />
-                <ScalarProperty Name="Length" ColumnName="Length" />
-                <ScalarProperty Name="YearRecorded" ColumnName="YearRecorded" />
-                <ScalarProperty Name="RecordCover" ColumnName="RecordCover" />
-                <ScalarProperty Name="StockStatus" ColumnName="StockStatus" />
-                <ScalarProperty Name="GenreID" ColumnName="GenreID" />
-                <ScalarProperty Name="BandID" ColumnName="BandID" />
-                <ScalarProperty Name="StudioID" ColumnName="StudioID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="StockStatus">
             <EntityTypeMapping TypeName="NeedlesAndScratchModel.StockStatu">
               <MappingFragment StoreEntitySet="StockStatus">
@@ -659,18 +576,6 @@ warning 6002: The table/view 'NeedlesAndScratch.dbo.EmpToDept' does not have a p
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="UserDetails">
-            <EntityTypeMapping TypeName="NeedlesAndScratchModel.UserDetail">
-              <MappingFragment StoreEntitySet="UserDetails">
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
-                <ScalarProperty Name="LastName" ColumnName="LastName" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="FavGenre" ColumnName="FavGenre" />
-                <ScalarProperty Name="FavBand" ColumnName="FavBand" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <AssociationSetMapping Name="BandToArtist" TypeName="NeedlesAndScratchModel.BandToArtist" StoreEntitySet="BandToArtist">
             <EndProperty Name="Artist">
               <ScalarProperty Name="ID" ColumnName="ArtistID" />
@@ -687,6 +592,35 @@ warning 6002: The table/view 'NeedlesAndScratch.dbo.EmpToDept' does not have a p
               <ScalarProperty Name="ID" ColumnName="EmpID" />
             </EndProperty>
           </AssociationSetMapping>
+          <EntitySetMapping Name="Records">
+            <EntityTypeMapping TypeName="NeedlesAndScratchModel.Record">
+              <MappingFragment StoreEntitySet="Record">
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="StudioID" ColumnName="StudioID" />
+                <ScalarProperty Name="BandID" ColumnName="BandID" />
+                <ScalarProperty Name="GenreID" ColumnName="GenreID" />
+                <ScalarProperty Name="StockStatus" ColumnName="StockStatus" />
+                <ScalarProperty Name="RecordCover" ColumnName="RecordCover" />
+                <ScalarProperty Name="YearRecorded" ColumnName="YearRecorded" />
+                <ScalarProperty Name="Length" ColumnName="Length" />
+                <ScalarProperty Name="Tracks" ColumnName="Tracks" />
+                <ScalarProperty Name="RecordName" ColumnName="RecordName" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserDetails">
+            <EntityTypeMapping TypeName="NeedlesAndScratchModel.UserDetail">
+              <MappingFragment StoreEntitySet="UserDetails">
+                <ScalarProperty Name="FavBand" ColumnName="FavBand" />
+                <ScalarProperty Name="FavGenre" ColumnName="FavGenre" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

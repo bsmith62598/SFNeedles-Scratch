@@ -3,21 +3,10 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <title>@ViewBag.Title - Needles And Scratch</title>
 
-    <!-- Lightbox-->
-    <link rel="stylesheet" href="~/Content/lightbox2/css/lightbox.min.css">
-    <!-- Owl Carousel-->
-    <link rel="stylesheet" href="~/Content/owl.carousel2/assets/owl.carousel.min.css">
-    <link rel="stylesheet" href="~/Content/owl.carousel2/assets/owl.theme.default.css">
-    <!-- Google fonts-->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@300;400;700&amp;display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Martel+Sans:wght@300;400;800&amp;display=swap">
-    <!-- theme stylesheet-->
-    <link rel="stylesheet" href="~/Content/style.default.css" id="theme-stylesheet">
-    <!-- Custom stylesheet - for your changes-->
-    <link rel="stylesheet" href="~/Content/custom.css">
-
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 
@@ -49,6 +38,21 @@
                         <li>@Html.ActionLink("Employees", "Index", "Employees")</li>
                         <li>@Html.ActionLink("Studios", "Index", "Studios")</li>
                     }
+
+                    <li class="nav-item">
+                        @if (Session["cart"] != null && ((Dictionary<int, NeedlesAndScratch.UI.Secured.Models.CartItemViewModel>)Session["cart"]).Count > 0)
+                        {
+                            var cart = ((Dictionary<int, NeedlesAndScratch.UI.Secured.Models.CartItemViewModel>)Session["cart"]);
+                            var cartCount = cart.Sum(c => c.Value.Qty);
+
+                            <a class="dropdown-item" href="/ShoppingCart/Index"><i class="fade fa-shopping-cart"></i>&nbsp;&nbsp;&nbsp;@cartCount</a>
+                        }
+                        else
+                        {
+                            <a class="dropdown-item" href="/ShoppingCart/Index">Cart</a>
+                        }
+                    </li>
+
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>
@@ -69,12 +73,7 @@
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
-    <script src="~/Scripts/lightbox2/js/lightbox.min.js"></script>
-    <script src="~/Scripts/nouislider/nouislider.min.js"></script>
-    <script src="~/Scripts/bootstrap-select/js/bootstrap-select.min.js"></script>
-    <script src="~/Scripts/owl.carousel2/owl.carousel.min.js"></script>
-    <script src="~/Scripts/owl.carousel2.thumbs/owl.carousel2.thumbs.min.js"></script>
-    <script src="~/Scripts/front.js"></script>
+    @Scripts.Render("~/bundles/template")
     @RenderSection("scripts", required: false)
 
     <!-- FontAwesome CSS - loading as last, so it doesn't block rendering-->

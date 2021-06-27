@@ -24,6 +24,7 @@ namespace NeedlesAndScratch.DATA.EF
         public int GenreID { get; set; }
         public int BandID { get; set; }
         public int StudioID { get; set; }
+        public Nullable<decimal> Price { get; set; }
     
         public virtual Band Band { get; set; }
         public virtual Genre Genre { get; set; }
