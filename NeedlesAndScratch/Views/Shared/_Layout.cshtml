@@ -7,6 +7,9 @@
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@300;400;700&amp;display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Martel+Sans:wght@300;400;800&amp;display=swap">
+
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/dark-hive/jquery-ui.css">
+
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 
@@ -45,11 +48,11 @@
                             var cart = ((Dictionary<int, NeedlesAndScratch.UI.Secured.Models.CartItemViewModel>)Session["cart"]);
                             var cartCount = cart.Sum(c => c.Value.Qty);
 
-                            <a class="dropdown-item" href="/ShoppingCart/Index"><i class="fade fa-shopping-cart"></i>&nbsp;&nbsp;&nbsp;@cartCount</a>
+                            <a href="/ShoppingCart/Index"><i class="fade fa-shopping-cart"></i>&nbsp;&nbsp;&nbsp;@cartCount</a>
                         }
                         else
                         {
-                            <a class="dropdown-item" href="/ShoppingCart/Index">Cart</a>
+                            <a href="/ShoppingCart/Index">Cart</a>
                         }
                     </li>
 
@@ -64,7 +67,7 @@
 
 
         <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+            <p>&copy; @DateTime.Now.Year - StoreFront - Needls & Scratch</p>
             <div class="col-lg-6 text-lg-right">
                 <p class="small text-muted mb-0">Template designed by <a class="text-white reset-anchor" href="https://bootstraptemple.com/p/bootstrap-ecommerce">Bootstrap Temple</a></p>
             </div>
@@ -74,6 +77,13 @@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @Scripts.Render("~/bundles/template")
+
+    <!--ADDEDjQuery UI CDN-->
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+    <!-- ADDED jQuery Ajax CDN-->
+    <script src="https://cdn.jsdelivr.net/jquery.ajax.unobtrusive/3.2.4/jquery.unobtrusive-ajax.min.js"></script>
+
     @RenderSection("scripts", required: false)
 
     <!-- FontAwesome CSS - loading as last, so it doesn't block rendering-->

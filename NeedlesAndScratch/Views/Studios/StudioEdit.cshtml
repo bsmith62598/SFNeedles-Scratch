@@ -1,0 +1,40 @@
+﻿@model NeedlesAndScratch.DATA.EF.Studio
+
+
+@using (Html.BeginForm("AjaxEdit", "Studios", FormMethod.Post, new { id = "StudioEditForm" }))
+{
+    @Html.AntiForgeryToken()
+
+    <table>
+        <tr>
+            @Html.HiddenFor(model => model.ID)
+            <td>
+                @Html.EditorFor(model => model.StudioName, new { htmlAttributes = new { @class = "form-control", style = "width:400px;" } })
+                @Html.ValidationMessageFor(model => model.StudioName, "", new { @class = "text-danger" })
+            </td>
+            <td>
+                @Html.EditorFor(model => model.StudioCity, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.StudioCity, "", new { @class = "text-danger" })
+            </td>
+            <td>
+                @Html.EditorFor(model => model.StudioState, new { htmlAttributes = new { @class = "form-control", style = "width: 65px; margin-right: 66px;" } })
+                @Html.ValidationMessageFor(model => model.StudioState, "", new { @class = "text-danger" })
+            </td>
+            <td>
+                @Html.EditorFor(model => model.StudioCountry, new { htmlAttributes = new { @class = "form-control", style = "width: 65px; margin-right: 66px;" } })
+                @Html.ValidationMessageFor(model => model.StudioCountry, "", new { @class = "text-danger", style = "margin-right: 126px;" })
+            </td>
+            <td>
+                @Html.EditorFor(model => model.YearFounded, new { htmlAttributes = new { @class = "form-control", style = "width: 65px; margin-right: 66px;" } })
+                @Html.ValidationMessageFor(model => model.YearFounded, "", new { @class = "text-danger", style = "margin-right: 126px;" })
+            </td>
+            <td>
+                <input type="button" id="saveUpdate" value="Update Studio" class="btn btn-primary" />
+            </td>
+        </tr>
+    </table>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

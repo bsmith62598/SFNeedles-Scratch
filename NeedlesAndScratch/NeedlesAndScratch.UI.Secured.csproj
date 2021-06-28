@@ -178,6 +178,7 @@
     <Compile Include="Controllers\BandsController.cs" />
     <Compile Include="Controllers\DepartmentsController.cs" />
     <Compile Include="Controllers\EmployeesController.cs" />
+    <Compile Include="Controllers\ErrorsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\RecordsController.cs" />
@@ -185,12 +186,14 @@
     <Compile Include="Controllers\ShoppingCartController.cs" />
     <Compile Include="Controllers\StudiosController.cs" />
     <Compile Include="Controllers\UserAdminController.cs" />
+    <Compile Include="Exceptions\DBOfflineException.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\AdminViewModel.cs" />
     <Compile Include="Models\CartItemViewModel.cs" />
+    <Compile Include="Models\ContactViewModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -367,6 +370,7 @@
     <Content Include="Content\Images\RecordCovers\t_a82faa48-430c-4d62-9eff-c16c165bb9bb.jpg" />
     <Content Include="Content\Images\rock.jpg" />
     <Content Include="Content\PagedList.css" />
+    <Content Include="error.html" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -760,6 +764,13 @@
     <Content Include="_Archive\vendor\node-sass\vendor\linux-x64-64\binding.node" />
     <Content Include="_Archive\vendor\nouislider\CHANGELOG.MD" />
     <Content Include="Views\ShoppingCart\Index.cshtml" />
+    <Content Include="Views\Studios\StudioCreate.cshtml" />
+    <Content Include="Views\Studios\StudioDetails.cshtml" />
+    <Content Include="Views\Studios\StudioEdit.cshtml" />
+    <Content Include="Views\Errors\DBOffline.cshtml" />
+    <Content Include="Views\Errors\Index.cshtml" />
+    <Content Include="Views\Errors\NotFound.cshtml" />
+    <Content Include="Views\Errors\Unresolved.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

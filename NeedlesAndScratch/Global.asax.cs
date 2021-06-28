@@ -17,5 +17,13 @@ namespace NeedlesAndScratch.UI.Secured
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
         }
+
+        protected void Application_Error()
+        {
+            //Response.Redirect("~/Errors/Unresolved");
+
+            //Instead, we can also go the SUPER SAFE route: Send the user to a basic HTML page that is hard to fail
+            //Response.Redirect("~/error.html");
+        }
     }
 }

@@ -20,6 +20,7 @@ namespace NeedlesAndScratch.Controllers
             return View(db.Studios.ToList());
         }
 
+        #region Default CRUD
         // GET: Studios/Details/5
         public ActionResult Details(int? id)
         {
@@ -114,6 +115,59 @@ namespace NeedlesAndScratch.Controllers
             db.SaveChanges();
             return RedirectToAction("Index");
         }
+        #endregion
+
+        #region AJAX CRUD
+        //AJAX DELETE
+        [AcceptVerbs(HttpVerbs.Post)]
+        public JsonResult AjaxDelete(int ID)
+        {
+            Studio studio = db.Studios.Find(ID);
+            db.Studios.Remove(studio);
+            db.SaveChanges();
+
+            string confirmMessage = string.Format("Deleted Studio '{0}' from the database.", studio.StudioName);
+
+            return Json(new { id = ID, message = confirmMessage });
+        }
+
+        //AJAX DETAILS
+        [HttpGet]
+        public PartialViewResult StudioDetails(int id)
+        {
+            Studio studio = db.Studios.Find(id);
+            
+            return PartialView(studio);
+        }
+
+        //AJAX CREATE
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public JsonResult StudioCreate(Studio studio)
+        {
+            db.Studios.Add(studio);
+            db.SaveChanges();
+            return Json(studio);
+        }
+
+        //AJAX EDIT
+        [HttpGet]
+        public PartialViewResult StudioEdit(int id)
+        {
+            Studio studio = db.Studios.Find(id);
+            return PartialView(studio);
+        }
+
+        //POST
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public JsonResult AjaxEdit(Studio studio)
+        {
+            db.Entry(studio).State = EntityState.Modified;
+            db.SaveChanges();
+            return Json(studio);
+        }
+        #endregion
 
         protected override void Dispose(bool disposing)
         {

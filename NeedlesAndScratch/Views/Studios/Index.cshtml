@@ -4,12 +4,16 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    <button id="toggleStudioCreate" class="btn btn-dark text-right pull-left">Add New</button>
 </p>
-<table class="table">
+
+<div id="StudioCreate">
+    @Html.Partial("StudioCreate", new NeedlesAndScratch.DATA.EF.Studio())
+</div>
+
+<table class="table" id="StudiosTable">
     <tr>
         <th>
             @Html.DisplayNameFor(model => model.StudioName)
@@ -30,7 +34,7 @@
     </tr>
 
 @foreach (var item in Model) {
-    <tr>
+    <tr id="Studio-@item.ID">
         <td>
             @Html.DisplayFor(modelItem => item.StudioName)
         </td>
@@ -47,11 +51,163 @@
             @Html.DisplayFor(modelItem => item.YearFounded)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.ID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.ID })
+            <a href="" class="DetailsLink" id="@item.ID">Details</a> |
+
+            <a href="" class="EditLink" id="@item.ID">Edit</a>
+
+
+            @Ajax.ActionLink("Delete", "AjaxDelete", "Studios",
+               new { ID = item.ID},
+               new AjaxOptions
+               {
+                   HttpMethod = "POST",
+                   Confirm = $"Are you sure you want to delete {item.StudioName} from studios?",
+                   OnSuccess = "deleteConfirmed",
+                   OnFailure = "deleteFailed"
+               })
         </td>
     </tr>
 }
 
 </table>
+
+<div id="StudioDetails"></div>
+
+@section scripts{
+    <script>
+        //**********AJAX Delete**********//
+        function deleteConfirmed(response, status, data) {
+            var rowID = "Studio-" + response.id;
+            $("#StudiosTable").find(rowID).remove();
+            
+            $("#MessageContent").html("<div class = 'alert alert-success'>" + response.message + "</div>");
+        };
+
+        function deleteFailed(response, status, data) {
+            $("#MessageContent").html("<div class = 'alert alert-danger'>Delete unsuccessful. Is this studio referenced by a record? If so, change the record's studio or delete the record.</div>");
+        };
+        //**********AJAX Details**********//
+        $('a.DetailsLink').click(function (e) {
+            e.preventDefault();
+
+            $('#StudioDetails').data('ID', $(this).attr('ID')).dialog({
+                width: 400,
+                height: 200,
+                open: function () {
+                    var studioID = $(this).data('ID');
+                    $(this).load("/Studios/StudioDetails/" + studioID);
+                },
+                title: "Studio Details",
+                modal: true,
+                resizeable: false
+            });
+        });
+
+            //***********Show Create Form************//
+            $("#StudioCreate").hide();
+
+            $("#toggleStudioCreate").click(function () {
+                $("#StudioCreate").toggle();
+            });
+
+            //**********AJAX Create**********//
+            $("#StudioCreateForm").submit(function (e) {
+                var formData = $(this).serializeArray();
+                console.log(formData);
+                e.preventDefault();
+
+                $.ajax({
+                    url: "/Studios/StudioCreate",
+                    type: "POST",
+                    data: formData,
+                    dataType: "json",
+                    error: function (e) {
+                        $("#MessageContent").html("<div class='alert alert-danger'>There was a problem or something</div>");
+                    },
+                    success: function (foo) {
+                        $("#MessageContent").html("<div class='alert alert-success'>Studio added</div>");
+                        $("#StudioCreateForm")[0].reset();
+                        $(function () {
+                            var row = '<tr><td>' + foo.StudioName
+                                + '</td><td>' + foo.City
+                                + '</td><td>' + foo.State
+                                + '</td><td>' + foo.Country
+                                + '</td><td>' + foo.YearFounded
+                                + '</td><td>Refresh to view options</td></tr>';
+                            $('#StudiosTable').append(row);
+                        });
+                    }
+                });
+            });
+
+            //**********AJAX Update***********//
+            var originalContent = null;
+
+            $("a.EditLink").click(function (e) {
+                e.preventDefault();
+                var StudioID = $(this).attr("ID");
+
+                var row = $("#Studio-" + StudioID).children();
+
+                originalContent = {
+                    StudioId: StudioID,
+                    StudioName: row[0].innerText,
+                    City: row[1].innerText,
+                    State: row[2].innerText,
+                    Country: row[3].innerText,
+                    YearFounded: row[4].firstElementChild
+                };
+
+                console.log(originalContent);
+
+                $.get("/Studios/StudioEdit/" + StudioID, function (data) {
+                    $('#Studio-' + StudioID).replaceWith(
+                        '<tr id="Studio-' + StudioID + '"><td colspan="5">' + data + '</td></tr>');
+                });
+            });
+
+            $(document).on("click", "#saveUpdate", function () {
+                var formData = $("#StudioEditForm").serializeArray();
+
+                $('#MessageContent').html("<div class='alert alert-info'>Please wait...</div>");
+
+                $.ajax({
+                    url: "/Studios/AjaxEdit",
+                    type: "POST",
+                    data: formData,
+                    dataType: "json",
+                    success: function (data) {
+                        $('#MessageContent').html("<div class='alert alert-success'>Your record was successfully updated!</div>");
+                        $('#StudioEditForm')[0].reset();
+
+                        console.log(data);
+
+                        $(function () {
+                            var row = '<tr><td>' + data.StudioName
+                                + '</td><td>' + data.City
+                                + '</td><td>' + data.State
+                                + '</td><td>' + data.Country
+                                + '</td><td>' + data.YearFounded
+                                + '</td><td>Refresh to view options</td></tr>';
+
+                            $('#Studio-' + data.StudioID).replaceWith(row);
+                        });
+                    },
+                    error: function (e) {
+                        $('#MessageContent').html("<div class='alert alert-warning'>There was an error. Please try again or contact the administrator.</div>");
+
+                        $(function () {
+                            var row = '<tr id="Studio-' + originalContent.ID + '"><td>' + originalContent.StudioName
+                                + '</td><td>' + originalContent.City
+                                + '</td><td>' + originalContent.State
+                                + '</td><td>' + originalContent.Country
+                                + '</td><td>' + originalContent.YearFounded
+                                + '</td><td>Refresh to view options</td></tr>';
+
+                            $('#Studio-' + data.StudioID).replaceWith(row);
+                        });
+                    }
+                });
+            });
+    </script>
+    }
